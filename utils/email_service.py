@@ -19,20 +19,19 @@ def enviar_correo(datos_usuario):
         # Intentar obtener desde Streamlit Secrets (producción)
         SERVICE_ID = st.secrets["EMAILJS_SERVICE_ID"]
         TEMPLATE_ID = st.secrets["EMAILJS_TEMPLATE_ID"]
-        PUBLIC_KEY = st.secrets["EMAILJS_PUBLIC_KEY"]
+        PRIVATE_KEY = st.secrets["EMAILJS_PRIVATE_KEY"]  # <--- CAMBIADO
         EMAIL_ADMIN = st.secrets["EMAIL_ADMIN"]
     except:
-        # Si falla, intentar desde .env (desarrollo local)
         from dotenv import load_dotenv
         load_dotenv()
         
         SERVICE_ID = os.getenv("EMAILJS_SERVICE_ID")
         TEMPLATE_ID = os.getenv("EMAILJS_TEMPLATE_ID")
-        PUBLIC_KEY = os.getenv("EMAILJS_PUBLIC_KEY")
+        PRIVATE_KEY = os.getenv("EMAILJS_PRIVATE_KEY")  # <--- CAMBIADO
         EMAIL_ADMIN = os.getenv("EMAIL_ADMIN")
     
     # Verificar que todas las variables existen
-    if not all([SERVICE_ID, TEMPLATE_ID, PUBLIC_KEY, EMAIL_ADMIN]):
+    if not all([SERVICE_ID, TEMPLATE_ID, PRIVATE_KEY, EMAIL_ADMIN]):
         return {
             "exito": False,
             "mensaje": "Faltan credenciales de EmailJS. Verifica la configuración."
@@ -62,9 +61,10 @@ def enviar_correo(datos_usuario):
     payload = {
         "service_id": SERVICE_ID,
         "template_id": TEMPLATE_ID,
-        "user_id": PUBLIC_KEY,
+        "user_id": PRIVATE_KEY,  # <--- USAR PRIVATE KEY
         "template_params": template_params
     }
+
     
     try:
         # Enviar solicitud a EmailJS

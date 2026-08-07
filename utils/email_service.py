@@ -1,13 +1,27 @@
 import requests
 import json
+import streamlit as st
 
 def enviar_correo(datos):
     """
-    Envía la información del reporte a EmailJS mapeando las variables de la plantilla HTML.
+    Envía el reporte a EmailJS usando credenciales de st.secrets o valores por defecto.
     """
+    # Intentar obtener credenciales de st.secrets o usar las fijas
+    service_id = st.secrets.get("EMAILJS_SERVICE_ID", "service_844lp4n")
+    template_id = st.secrets.get("EMAILJS_TEMPLATE_ID", "template_8zrdioc")
+    public_key = st.secrets.get("EMAILJS_PUBLIC_KEY", "1cXVMYweDioV6ajCc")
+    private_key = st.secrets.get("EMAILJS_PRIVATE_KEY", None)
+
+    # Validar que existan las credenciales mínimas
+    if not service_id or not template_id or not public_key:
+        return {
+            "exito": False,
+            "mensaje": "Faltan credenciales de EmailJS. Verifica la configuración de Secrets."
+        }
+
     url = "https://api.emailjs.com/api/v1.0/email/send"
-    
-    # Mapeo de emojis según la prioridad seleccionada
+
+    # Mapeo de emojis para la prioridad
     emojis_prioridad = {
         "Muy Alta": "🔴",
         "Alta": "🟠",
@@ -15,14 +29,13 @@ def enviar_correo(datos):
         "Baja": "🟢",
         "Muy Baja": "⚪"
     }
-    
     priority_emoji = emojis_prioridad.get(datos.get("prioridad"), "📌")
 
-    # Mapeo exacto con los {{nombres_de_variables}} de tu plantilla de EmailJS
+    # Construcción del Payload
     payload = {
-        "service_id": "service_844lp4n",
-        "template_id": "template_8zrdioc",
-        "user_id": "1cXVMYweDioV6ajCc",  # Tu Public Key
+        "service_id": service_id,
+        "template_id": template_id,
+        "user_id": public_key,
         "template_params": {
             "report_date": datos.get("fecha"),
             "priority_emoji": priority_emoji,
@@ -39,20 +52,24 @@ def enviar_correo(datos):
         }
     }
 
+    # Si tienes activada la casilla de "Usa la clave privada" en EmailJS:
+    if private_key:
+        payload["accessToken"] = private_key
+
     headers = {
         "Content-Type": "application/json"
     }
 
     try:
         response = requests.post(url, data=json.dumps(payload), headers=headers)
-        
+
         if response.status_code == 200:
             return {"exito": True, "mensaje": "OK"}
         else:
             return {
-                "exito": False, 
+                "exito": False,
                 "mensaje": f"Error {response.status_code}: {response.text}"
             }
-            
+
     except Exception as e:
         return {"exito": False, "mensaje": str(e)}

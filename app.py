@@ -5,7 +5,7 @@ from datetime import datetime
 
 # Configuración de la página
 st.set_page_config(
-    page_title="Sistema de Soporte Técnico",
+    page_title="Sistema de Soporte Técnico-Fabricio",
     page_icon="🛠️",
     layout="centered",
     initial_sidebar_state="collapsed"
@@ -71,7 +71,7 @@ if 'datos' not in st.session_state:
 with st.form("formulario_soporte", clear_on_submit=False):
     
     # Información del usuario
-    st.subheader("👤 Información del Usuario")
+    st.subheader("Información del Usuario")
     
     col1, col2 = st.columns(2)
     
@@ -103,7 +103,7 @@ with st.form("formulario_soporte", clear_on_submit=False):
     st.divider()
     
     # Detalles del problema
-    st.subheader("🔍 Detalles de la Incidencia")
+    st.subheader("Detalles de la Incidencia")
     
     col3, col4 = st.columns(2)
     
@@ -166,7 +166,7 @@ with st.form("formulario_soporte", clear_on_submit=False):
     st.divider()
     
     # Descripción del problema
-    st.subheader("📝 Descripción del Problema")
+    st.subheader("Descripción del Problema")
     
     descripcion = st.text_area(
         "Descripción detallada *",
@@ -272,11 +272,11 @@ if enviar:
                     ), unsafe_allow_html=True)
                     
                     # Mostrar resumen del reporte
-                    with st.expander("📋 Ver detalles del reporte enviado"):
+                    with st.expander(" Ver detalles del reporte enviado"):
                         st.json(st.session_state.datos)
                     
                     # Botón para nuevo reporte
-                    if st.button("📝 Crear nuevo reporte"):
+                    if st.button("Crear nuevo reporte"):
                         st.session_state.enviado = False
                         st.rerun()
                 

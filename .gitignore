@@ -28,3 +28,8 @@ venv.bak/
 # OS
 .DS_Store
 Thumbs.db
+
+# EmailJS credentials
+*.key
+*.pem
+*.crt

@@ -239,17 +239,20 @@ if enviar:
             try:
                 # Guardar datos en sesión
                 st.session_state.datos = {
-                "nombre": nombre.strip(),
-                    "email": email.strip(),
-                    "telefono": telefono.strip() if telefono else "No proporcionado",
-                    "departamento": departamento if departamento != "Selecciona..." else "No especificado",
-                    "tipo_problema": tipo_problema,
-                    "prioridad": prioridad,
-                    "sistema_afectado": sistema_afectado if sistema_afectado != "Selecciona..." else "No especificado",
-                    "descripcion": descripcion.strip(),
-                    "fecha": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-                    "archivo": archivo_adjunto # <--- Pasamos el objeto subido por Streamlit
+    "nombre": nombre.strip(),
+    "email": email.strip(),
+    "telefono": telefono.strip() if telefono else "No proporcionado",
+    "departamento": departamento if departamento != "Selecciona..." else "No especificado",
+    "tipo_problema": tipo_problema,
+    "prioridad": prioridad,
+    "sistema_afectado": sistema_afectado if sistema_afectado != "Selecciona..." else "No especificado",
+    "descripcion": descripcion.strip(),
+    "fecha": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+    "tiene_archivo": archivo_adjunto is not None,
+    "nombre_archivo": archivo_adjunto.name if archivo_adjunto else "Sin archivo",
+    "archivo_objeto": archivo_adjunto # <--- Pasamos el archivo
 }
+                
                 
                 # Enviar correo
                 resultado = enviar_correo(st.session_state.datos)

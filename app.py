@@ -239,7 +239,7 @@ if enviar:
             try:
                 # Guardar datos en sesión
                 st.session_state.datos = {
-                    "nombre": nombre.strip(),
+                "nombre": nombre.strip(),
                     "email": email.strip(),
                     "telefono": telefono.strip() if telefono else "No proporcionado",
                     "departamento": departamento if departamento != "Selecciona..." else "No especificado",
@@ -248,9 +248,8 @@ if enviar:
                     "sistema_afectado": sistema_afectado if sistema_afectado != "Selecciona..." else "No especificado",
                     "descripcion": descripcion.strip(),
                     "fecha": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-                    "tiene_archivo": archivo_adjunto is not None,
-                    "nombre_archivo": archivo_adjunto.name if archivo_adjunto else "Sin archivo"
-                }
+                    "archivo": archivo_adjunto # <--- Pasamos el objeto subido por Streamlit
+}
                 
                 # Enviar correo
                 resultado = enviar_correo(st.session_state.datos)
@@ -300,7 +299,7 @@ if enviar:
 st.markdown("""
 <div class="footer">
     <p>🔒 Este reporte se envía de forma segura al administrador</p>
-    <p>📧 Sistema de Soporte Técnico Cloud - v1.0.0</p>
+    <p>📧 Sistema de Soporte Técnico-- Fabricio Antonio0</p>
     <p style="font-size: 0.8rem;">📌 Los datos no se almacenan en base de datos</p>
 </div>
 """, unsafe_allow_html=True)

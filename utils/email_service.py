@@ -5,7 +5,7 @@ import base64
 
 def enviar_correo(datos):
     """
-    Envía el reporte a EmailJS usando credenciales de st.secrets o valores por defecto.
+    Envía el reporte a EmailJS enviando el archivo adjunto en Base64.
     """
     service_id = st.secrets.get("EMAILJS_SERVICE_ID", "service_844lp4n")
     template_id = st.secrets.get("EMAILJS_TEMPLATE_ID", "template_8zrdioc")
@@ -29,15 +29,15 @@ def enviar_correo(datos):
     }
     priority_emoji = emojis_prioridad.get(datos.get("prioridad"), "📌")
 
-    # --- PROCESAMIENTO DEL ARCHIVO ADJUNTO ---
-    content_b64 = None
+    # --- PROCESAMIENTO DEL ARCHIVO A BASE64 ---
+    content_b64 = ""
     if datos.get("archivo_objeto") is not None:
         archivo = datos["archivo_objeto"]
-        # Convertir los bytes del UploadedFile a string base64
         bytes_data = archivo.getvalue()
+        # Convertimos los bytes del archivo a texto Base64
         content_b64 = base64.b64encode(bytes_data).decode("utf-8")
 
-    # Construcción de template_params
+    # Mapeo de parámetros para la plantilla
     template_params = {
         "report_date": datos.get("fecha"),
         "priority_emoji": priority_emoji,
@@ -50,12 +50,9 @@ def enviar_correo(datos):
         "system": datos.get("sistema_afectado"),
         "description": datos.get("descripcion"),
         "has_attachment": "Sí" if datos.get("tiene_archivo") else "No",
-        "filename": datos.get("nombre_archivo")
+        "filename": datos.get("nombre_archivo"),
+        "my_file": content_b64  # <--- Pasamos el string base64 del archivo
     }
-
-    # Si hay archivo, agregamos la propiedad en template_params
-    if content_b64:
-        template_params["content"] = content_b64
 
     payload = {
         "service_id": service_id,

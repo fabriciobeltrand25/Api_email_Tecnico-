@@ -271,9 +271,7 @@ if enviar:
                         f"INC-{datetime.now().strftime('%Y%m%d')}-{hash(st.session_state.datos['email']) % 10000:04d}"
                     ), unsafe_allow_html=True)
                     
-                    # Mostrar resumen del reporte
-                    with st.expander(" Ver detalles del reporte enviado"):
-                        st.json(st.session_state.datos)
+                   
                     
                     # Botón para nuevo reporte
                     if st.button("Crear nuevo reporte"):

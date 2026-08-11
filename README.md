@@ -20,4 +20,4 @@ Aplicación web para reporte de incidencias técnicas con envío automático de 
 - Requests
 - python-dotenv
 
-## 📁 Estructura del Proyecto
+
